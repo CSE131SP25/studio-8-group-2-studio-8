@@ -2,50 +2,55 @@ package studio8;
 
 import java.util.Scanner;
 
-import support.cse131.NotYetImplementedException;
-
 public class Quiz {
-	
-	/**
-	 * Constructor
-	 * @param questions
-	 */
+
+	private Question[] questions;
+
 	public Quiz(Question[] questions) {
-		throw new NotYetImplementedException();
+		this.questions = questions;
 	}
-	
-	/**
-	 * Prompts the user to answer, then returns a String containing their answer.
-	 * @param in
-	 * @return String answer
-	 */
+
 	private String getUserAnswer(Scanner in) {
 		System.out.print("Please enter your answer: ");
-		String out = in.next();
-		return out;
+		return in.nextLine(); // Allows full input with spaces
 	}
-	
-	/**
-	 * Gets the number of points possible in the quiz.
-	 * @return int number of total points
-	 */
+
 	public int getTotalPoints() {
-		throw new NotYetImplementedException();
+		int total = 0;
+		for (Question q : questions) {
+			total += q.getPoints();
+		}
+		return total;
 	}
-	
-	/**
-	 * Asks the user all question in the quiz, then prints out 
-	 * the amount of points the user earned. This print statement
-	 * should include "You earned ____ points"
-	 * 
-	 * @param in Scanner object to feed into getUserAnswer
-	 */
+
 	public void takeQuiz(Scanner in) {
-		throw new NotYetImplementedException();
+		int earned = 0;
+		for (Question q : questions) {
+			q.displayPrompt();
+			String response = getUserAnswer(in);
+			earned += q.checkAnswer(response);
+		}
+		System.out.println("You earned " + earned + " out of " + getTotalPoints() + " points.");
 	}
-	
-	
+
 	public static void main(String[] args) {
-		// TODO: Make your own Quiz!
+		Scanner scanner = new Scanner(System.in);
+
+		Question q1 = new Question("What is your favorite movie?", "500 days of summer", 50);
+
+		String[] mcOptions = {"131", "231", "425"};
+		MultipleChoiceQuestion q2 = new MultipleChoiceQuestion(
+			"What is the course code for this class?", "425", 1, mcOptions
+		);
+
+		String[] saOptions = {"A", "B", "C", "D"};
+		SelectAllQuestion q3 = new SelectAllQuestion(
+			"Which letters represent CS TAs who should watch 500 Days of Summer?", "AC", saOptions
+		);
+
+		Question[] allQuestions = {q1, q2, q3};
+		Quiz quiz = new Quiz(allQuestions);
+		quiz.takeQuiz(scanner);
+		scanner.close();
 	}
 }

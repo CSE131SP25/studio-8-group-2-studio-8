@@ -1,57 +1,37 @@
 package studio8;
 
-import support.cse131.NotYetImplementedException;
-
 public class Question {
-	
-	/**
-	 * Constructor
-	 * @param prompt
-	 * @param answer
-	 * @param points
-	 */
-	public Question(String prompt, String answer, int points) {
-		throw new NotYetImplementedException();
-	}
-	
-	/**
-	 * Prints out the current question's prompt, with a parenthetical 
-	 * number of points possible.
-	 */
-	public void displayPrompt() {
-		System.out.println(this.prompt + "(" + this.points + " points)");
-	}
-	
-	/**
-	 * Check the answer provided by a user
-	 * @param givenAnswer
-	 * @return the number of points earned by the givenAnswer
-	 */
-	public int checkAnswer(String givenAnswer) {
-		if(answer.equals(givenAnswer)) { //String comparison
-			return this.points;
-		} else {
-			return 0;
-		}
-	}
-	
-	/**
-	 * Getter method for the points possible
-	 * @return int points
-	 */
-	public int getPoints() {
-		throw new NotYetImplementedException();
-	}
-	
-	/**
-	 * Getter method for the answer to the question
-	 * @return String answer
-	 */
-	public String getAnswer() {
-		throw new NotYetImplementedException();
-	}
-	
-	public static void main(String[] args) {
-		// TODO: Create a Question object of your own!
-	}
+
+    private String prompt;
+    private String answer;
+    private int points;
+
+    public Question(String prompt, String answer, int points) {
+        this.prompt = prompt;
+        this.answer = answer;
+        this.points = points;
+    }
+
+    public void displayPrompt() {
+        System.out.println(this.prompt + " (" + this.points + " points)");
+    }
+
+    public int checkAnswer(String givenAnswer) {
+        return answer.equalsIgnoreCase(givenAnswer.trim()) ? this.points : 0;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public static void main(String[] args) {
+        Question q = new Question("What is your favorite movie?", "500 days of summer", 50);
+        q.displayPrompt();
+        System.out.println("Points earned: " + q.checkAnswer("500 days of summer"));
+        System.out.println("Points earned: " + q.checkAnswer("Anything else"));
+    }
 }

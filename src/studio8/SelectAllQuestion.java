@@ -1,72 +1,54 @@
 package studio8;
 
-import support.cse131.NotYetImplementedException;
-
 public class SelectAllQuestion extends MultipleChoiceQuestion {
 
-	/**
-	 * Constructor
-	 * 
-	 * @param prompt
-	 * @param answer
-	 * @param choices
-	 */
-	public SelectAllQuestion(String prompt, String answer, String[] choices) {
-		// Hint: 1 point per choice
-		throw new NotYetImplementedException();
-	}
-	
-	/**
-	 * Returns the amount of points scored by a provided givenAnswer
-	 * @param String givenAnswer to check for points
-	 */
-	public int checkAnswer(String givenAnswer) {
-		throw new NotYetImplementedException();
-	}
+    public SelectAllQuestion(String prompt, String answer, String[] choices) {
+        super(prompt, answer, answer.length(), choices); // Points = num of correct answers
+    }
 
-	/**
-	 * Count the amount of correct answers that are not in the provided givenAnswer
-	 * @param givenAnswer
-	 * @return int amount of missed correct answers
-	 */
-	private int findMissingCorrectAnswers(String givenAnswer) {
-		String answer = this.getAnswer();
-		//how many letters are in the correct answer but not the given answer?
-		int incorrectValues = findMissingCharacters(givenAnswer, answer);
-		return incorrectValues;
-	}
-	
-	/**
-	 * Count the amount of present answers that are not correct
-	 * @param givenAnswer
-	 * @return int amount of incorrect answers
-	 */
-	private int findIncorrectGivenAnswers(String givenAnswer) {
-		String answer = this.getAnswer();
-		//how many letters are in the given answer but not the correct answer?
-		int incorrectValues = findMissingCharacters(answer, givenAnswer);
-		return incorrectValues;
-	}
+    @Override
+    public int checkAnswer(String givenAnswer) {
+        int missed = findMissingCorrectAnswers(givenAnswer);   // Correct answers not selected
+        int wrong = findIncorrectGivenAnswers(givenAnswer);    // Wrong answers selected
+        int score = this.getPoints() - missed - wrong;
+        System.out.println(missed);
+        System.out.println(wrong);
+        System.out.println(score);
+        return Math.max(0, score);
+    }
 
-	/**
-	 * Returns the number of characters in toCheck that are missing from the
-	 * baseString. For example findMissingValues("hi", "hoi") would return 1,
-	 * 'o' is not in the baseString.
-	 * 
-	 * This method is marked static as it does not depend upon any instance variables
-	 */
-	private static int findMissingCharacters(String baseString, String toCheck) {
-		int missingValues = 0;
-		for(int i = 0; i < toCheck.length(); i++) {
-			char characterToLocate = toCheck.charAt(i);
-			if(baseString.indexOf(characterToLocate) == -1) { //not in baseString
-				missingValues++;
-			}
-		}
-		return missingValues;
-	}	
-	
-	public static void main(String[] args) {	
-		
-	}
+    private int findMissingCorrectAnswers(String givenAnswer) {
+        String correctAnswer = this.getAnswer();
+        return findMissingCharacters(givenAnswer, correctAnswer);
+    }
+
+    private int findIncorrectGivenAnswers(String givenAnswer) {
+        String correctAnswer = this.getAnswer();
+        return findMissingCharacters(correctAnswer, givenAnswer);
+    }
+
+    private static int findMissingCharacters(String baseString, String toCheck) {
+        int missingValues = 0;
+        for (int i = 0; i < toCheck.length(); i++) {
+            char characterToLocate = toCheck.charAt(i);
+            if (baseString.indexOf(characterToLocate) == -1) {
+                missingValues++;
+            }
+        }
+        return missingValues;
+    }
+
+    public static void main(String[] args) {
+        // Optional: manual test
+        String[] choices = {"instance variables", "git", "methods", "eclipse"};
+        SelectAllQuestion saq = new SelectAllQuestion(
+            "Select all of the following that can be found within a class:", "13", choices
+        );
+
+        saq.displayPrompt();
+        System.out.println("Score for '13': " + saq.checkAnswer("13"));  // full
+        System.out.println("Score for '1': " + saq.checkAnswer("1"));    // partial
+        System.out.println("Score for '2': " + saq.checkAnswer("2"));    // wrong
+        System.out.println("Score for '1234': " + saq.checkAnswer("1234")); // overselect
+    }
 }

@@ -1,41 +1,51 @@
 package studio8;
 
-import support.cse131.NotYetImplementedException;
-
 public class MultipleChoiceQuestion extends Question {
 
-	/**
-	 * Constructor
-	 * @param prompt
-	 * @param answer
-	 * @param points
-	 * @param choices
-	 */
-	public MultipleChoiceQuestion(String prompt, String answer, int points, String[] choices) {
-		// Call the super class constructor, then create and set
-		// instance variables for any values that aren't handled
-		// by the base class
-		throw new NotYetImplementedException();
-	}
-	
-	/**
-	 * Display the prompt for the question in addition to 
-	 * the choices present for the question.
-	 */
-	public void displayPrompt() {
-		throw new NotYetImplementedException();
-	}
-	
-	/**
-	 * Getter method for the available choices
-	 * @return String[] of choices
-	 */
-	public String[] getChoices() {
-		throw new NotYetImplementedException();
-	}
-	
-	public static void main(String[] args) {
-		// TODO: create your own MultipleChoiceQuestion
-	}
+    private String[] choices;
 
+    /**
+     * Constructor for MultipleChoiceQuestion
+     * @param prompt the text of the question
+     * @param answer the correct answer
+     * @param points the number of points possible
+     * @param choices the array of options to display
+     */
+    public MultipleChoiceQuestion(String prompt, String answer, int points, String[] choices) {
+        super(prompt, answer, points);  
+        this.choices = choices;         
+    }
+
+    /**
+     * Displays the question prompt and each of the choices
+     * in the format:
+     * 1. choice1
+     * 2. choice2
+     * ...
+     */
+    @Override
+    public void displayPrompt() {
+        super.displayPrompt(); // prints prompt and points
+        for (int i = 0; i < choices.length; i++) {
+            System.out.println((i + 1) + ". " + choices[i]);
+        }
+    }
+
+    /**
+     * Returns the array of answer choices
+     */
+    public String[] getChoices() {
+        return choices;
+    }
+
+    public static void main(String[] args) {
+        // Use this ONLY for your own testing – not needed for JUnit
+        String[] options = {"131", "231", "425"};
+        MultipleChoiceQuestion mcq = new MultipleChoiceQuestion(
+            "What is the course code for this class?", "425", 1, options
+        );
+
+        mcq.displayPrompt();
+        // Do not print anything else here during testing
+    }
 }
